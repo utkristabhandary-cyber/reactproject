@@ -5,7 +5,43 @@ import Products from './pages/Products.jsx'
 import Cart from './pages/Cart.jsx'
 
 export default function App() {
-  const [cart] = useState([])
+  const [cart, setCart] = useState([])
+
+  function addToCart(product) {
+    setCart((currentCart) => {
+      const existingItem = currentCart.find((item) => item.id === product.id)
+      if (existingItem) {
+        return currentCart.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item,
+        )
+      }
+      return [...currentCart, { ...product, quantity: 1 }]
+    })
+  }
+
+  function increaseQuantity(id) {
+    setCart((currentCart) =>
+      currentCart.map((item) =>
+        item.id === id ? { ...item, quantity: item.quantity + 1 } : item,
+      ),
+    )
+  }
+
+  function decreaseQuantity(id) {
+    setCart((currentCart) =>
+      currentCart
+        .map((item) =>
+          item.id === id ? { ...item, quantity: item.quantity - 1 } : item,
+        )
+        .filter((item) => item.quantity > 0),
+    )
+  }
+
+  function removeFromCart(id) {
+    setCart((currentCart) => currentCart.filter((item) => item.id !== id))
+  }
 
   const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0)
 
@@ -14,8 +50,18 @@ export default function App() {
       <Navbar cartItemCount={cartItemCount} />
       <main className="main-content">
         <Routes>
-          <Route path="/" element={<Products />} />
-          <Route path="/cart" element={<Cart />} />
+          <Route path="/" element={<Products onAddToCart={addToCart} />} />
+          <Route
+            path="/cart"
+            element={
+              <Cart
+                cart={cart}
+                onIncrease={increaseQuantity}
+                onDecrease={decreaseQuantity}
+                onRemove={removeFromCart}
+              />
+            }
+          />
         </Routes>
       </main>
     </div>
