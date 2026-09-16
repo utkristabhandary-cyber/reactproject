@@ -1,11 +1,28 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar.jsx'
 import Products from './pages/Products.jsx'
 import Cart from './pages/Cart.jsx'
 
+const STORAGE_KEY = 'campusCart'
+
+function loadCartFromStorage() {
+  try {
+    const savedCart = localStorage.getItem(STORAGE_KEY)
+    if (!savedCart) return []
+    const parsedCart = JSON.parse(savedCart)
+    return Array.isArray(parsedCart) ? parsedCart : []
+  } catch {
+    return []
+  }
+}
+
 export default function App() {
-  const [cart, setCart] = useState([])
+  const [cart, setCart] = useState(loadCartFromStorage)
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cart))
+  }, [cart])
 
   function addToCart(product) {
     setCart((currentCart) => {
