@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+  <rect width="400" height="300" fill="#dcfce7"/>
+  <text x="200" y="150" font-size="84" text-anchor="middle">📦</text>
+  <text x="200" y="230" font-size="26" font-family="Segoe UI, Arial, sans-serif" text-anchor="middle" fill="#333333">Desk Organizer</text>
+</svg>
